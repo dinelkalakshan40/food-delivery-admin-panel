@@ -1,6 +1,7 @@
 import {assets} from "../assets/assets.js";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {addFood} from "../services/foodService.js";
 
 const AddFood=()=>{
     const [image,setImage]=useState(false)
@@ -25,19 +26,15 @@ const AddFood=()=>{
             alert('Please select image');
             return;
         }
-        const formData =new FormData();
-        formData.append('food',JSON.stringify(data))
-        formData.append('file',image);
+
         try {
-          const response =await axios.post('http://localhost:8080/api/foods',formData,{headers: {"Content-type":'multipart/form-data'}});
-          if (response.status === 200){
-              alert("Foods add success");
-              setData({name:'',description:'',category: 'Biryani',price: ''})
-              setImage(null)
-          }
+            await addFood(data,image);
+            alert("Food added success");
+            setData({name: '',description: '',category: 'Biryani',price: ''});
+            setImage(null)
         }catch (error){
-            console.log('Error',error);
-            alert("error adding foods")
+            console.log('Error',error)
+            alert("error adding food",)
         }
     }
 
